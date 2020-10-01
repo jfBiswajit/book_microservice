@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Traits\ApiResponser;
+use GrahamCampbell\ResultType\Result;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -33,15 +34,37 @@ class AuthorController extends Controller
     return $this->successResponse($authors, Response::HTTP_CREATED);
   }
 
-  public function show()
+  public function show($id)
   {
+    $author = Author::findOrFail($id);
+    return $this->successResponse($author);
   }
 
-  public function update()
+  public function update(request $req, $id)
   {
+    $rules = [
+      'name' => 'max:255',
+      'gender' => 'max:10|in:male,female',
+      'country' => 'max:255',
+    ];
+
+    $this->validate($req, $rules);
+    $author = Author::findOrFail($id);
+    $author->fill($req->all());
+
+    if ($author->isClean()) {
+      return $this->errorResponse('Nothing is to update!', Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    $author->save();
+    return $this->successResponse($author);
   }
 
-  public function destroy()
+  public function destroy($id)
   {
+    $author = Author::findOrFail($id);
+    $author->delete();
+
+    return $this->successResponse($author);
   }
 }
