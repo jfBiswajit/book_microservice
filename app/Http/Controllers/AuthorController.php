@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
+use App\Traits\ApiResponser;
+
 class AuthorController extends Controller
 {
+  use ApiResponser;
 
   public function index()
   {
-    return 1;
+    $authors = Author::all();
+
+    return $this->successResponse($authors);
   }
 
   public function store()
