@@ -23,16 +23,17 @@ class BookController extends Controller
   public function store(Request $req)
   {
     $rules = [
-      'name' => 'required|max:255',
-      'gender' => 'required|max:10|in:male,female',
-      'country' => 'required|max:255',
+      'title' => 'required|max:255',
+      'description' => 'required|max:255',
+      'price' => 'required|min:1',
+      'author_id' => 'required|min:1',
     ];
 
     $this->validate($req, $rules);
 
-    $authors = Author::create($req->all());
+    $book = Book::create($req->all());
 
-    return $this->successResponse($authors, Response::HTTP_CREATED);
+    return $this->successResponse($book, Response::HTTP_CREATED);
   }
 
   public function show($id)
@@ -44,21 +45,22 @@ class BookController extends Controller
   public function update(request $req, $id)
   {
     $rules = [
-      'name' => 'max:255',
-      'gender' => 'max:10|in:male,female',
-      'country' => 'max:255',
+      'title' => 'max:255',
+      'description' => 'max:255',
+      'price' => 'min:1',
+      'author_id' => 'min:1',
     ];
 
     $this->validate($req, $rules);
-    $author = Author::findOrFail($id);
-    $author->fill($req->all());
+    $book = Book::findOrFail($id);
+    $book->fill($req->all());
 
-    if ($author->isClean()) {
+    if ($book->isClean()) {
       return $this->errorResponse('Nothing is to update!', Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    $author->save();
-    return $this->successResponse($author);
+    $book->save();
+    return $this->successResponse($book);
   }
 
   public function destroy($id)
