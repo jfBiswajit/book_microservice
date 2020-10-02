@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
+use App\Models\Book;
 use App\Traits\ApiResponser;
 use GrahamCampbell\ResultType\Result;
 use Illuminate\Http\Request;
@@ -14,9 +15,9 @@ class AuthorController extends Controller
 
   public function index()
   {
-    $authors = Author::all();
+    $books = Book::all();
 
-    return $this->successResponse($authors);
+    return $this->successResponse($books);
   }
 
   public function store(Request $req)
@@ -36,8 +37,8 @@ class AuthorController extends Controller
 
   public function show($id)
   {
-    $author = Author::findOrFail($id);
-    return $this->successResponse($author);
+    $book = Book::findOrFail($id);
+    return $this->successResponse($book);
   }
 
   public function update(request $req, $id)
@@ -62,9 +63,9 @@ class AuthorController extends Controller
 
   public function destroy($id)
   {
-    $author = Author::findOrFail($id);
-    $author->delete();
+    $book = Book::findOrFail($id);
+    $book->delete();
 
-    return $this->successResponse($author);
+    return $this->successResponse($book);
   }
 }
